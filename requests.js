@@ -1,3 +1,5 @@
+console.log('Downloading...');
+
 var request = require('request');
 var fs = require('fs');
 
@@ -6,14 +8,11 @@ request.get('https://sytantris.github.io/http-examples/future.jpg')
          throw err; 
        })
        .on('response', function (response) {
-         console.log('Downloading...');
-       })
-       .on('response', function (response) {
          console.log('Response Status Code: ', response.statusCode);
          console.log('Response Message: ', response.statusMessage);
          console.log('Content Type: ', response.headers['content-type']);
        })
-       .on('end', function (response) {
+       .pipe(fs.createWriteStream('./future.jpg'))
+       .on('finish', function (response) {
         console.log('Download Complete');
        })
-       .pipe(fs.createWriteStream('./future.jpg'))
